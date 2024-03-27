@@ -1,0 +1,289 @@
+<?xml version="1.0"?>
+
+<!-- Copyright © Klevu Oy. All rights reserved. See LICENSE.txt for license details. -->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <preference for="Klevu\LoggerApi\Api\ArchiveLogsInterface"
+                type="Klevu\Logger\WebApi\ArchiveLogs"/>
+
+    <preference for="Klevu\LoggerApi\Api\ClearLogsInterface"
+                type="Klevu\Logger\WebApi\ClearLogs"/>
+
+    <preference for="Klevu\LoggerApi\Api\Data\LogResponseInterface"
+                type="Klevu\Logger\WebApi\Log\Response"/>
+
+    <preference for="Klevu\LoggerApi\Service\Action\Directory\ArchiveActionInterface"
+                type="Klevu\Logger\Service\Action\Directory\ArchiveAction"/>
+
+    <preference for="Klevu\LoggerApi\Service\Action\Directory\DeleteActionInterface"
+                type="Klevu\Logger\Service\Action\Directory\DeleteAction"/>
+
+    <preference for="Klevu\LoggerApi\Service\Action\Directory\DownloadActionInterface"
+                type="Klevu\Logger\Service\Action\Directory\DownloadAction"/>
+
+    <preference for="Klevu\LoggerApi\Service\ArchiveLogsInterface"
+                type="Klevu\Logger\Service\ArchiveLogs"/>
+
+    <preference for="Klevu\LoggerApi\Service\ClearLogsInterface"
+                type="Klevu\Logger\Service\ClearLogs"/>
+
+    <preference for="Klevu\LoggerApi\Service\DownloadLogsInterface"
+                type="Klevu\Logger\Service\DownloadLogs"/>
+
+    <preference for="Klevu\LoggerApi\Service\FileNameSanitizerServiceInterface"
+                type="Klevu\Logger\Service\FileNameSanitizerService"/>
+
+    <preference for="Klevu\LoggerApi\Service\Provider\ArchiveDirectoryNameProviderInterface"
+                type="Klevu\Logger\Service\Provider\ArchiveDirectoryNameProvider"/>
+
+    <preference for="Klevu\LoggerApi\Service\Provider\LogFileNameProviderInterface"
+                type="Klevu\Logger\Service\Provider\LogFileNameProvider"/>
+
+    <preference for="Klevu\LoggerApi\Service\Provider\StoreLogsDirectoryPathProviderInterface"
+                type="Klevu\Logger\Service\Provider\StoreLogsDirectoryPathProvider"/>
+
+    <virtualType name="Klevu\Logger\Logger\Logger"
+                 type="Magento\Framework\Logger\Monolog">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="report" xsi:type="object">\Klevu\Logger\Handler\LogDisabled</item>
+                <item name="system" xsi:type="object">Klevu\Logger\Handler\LogDisabled</item>
+                <item name="debug" xsi:type="object">Klevu\Logger\Handler\LogDisabled</item>
+            </argument>
+            <argument name="processors" xsi:type="array">
+                <item name="psr_log_message_processor"
+                      xsi:type="object">Monolog\Processor\PsrLogMessageProcessor</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Klevu\Logger\Service\Provider\StoreLogsDirectoryWriter"
+                 type="Magento\Framework\Filesystem\Directory\Write">
+        <arguments>
+            <argument name="driver" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+            <argument name="path" xsi:type="string">/</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Klevu\Logger\Service\Provider\StoreLogsArchiveDirectoryPathProvider"
+                 type="Klevu\Logger\Service\Provider\StoreLogsDirectoryPathProvider">
+        <arguments>
+            <argument name="isArchive" xsi:type="boolean">true</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Klevu\Logger\Service\Provider\StoreLogsArchiveDirectoryProvider"
+                 type="Klevu\Logger\Service\Provider\StoreLogsDirectoryProvider">
+        <arguments>
+            <argument name="fileSystemDriver"
+                      xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+            <argument name="directoryPathProvider"
+                      xsi:type="object">Klevu\Logger\Service\Provider\StoreLogsArchiveDirectoryPathProvider</argument>
+            <argument name="directoryValidator"
+                      xsi:type="object">Klevu\Logger\Validator\LogArchiveDirectoryPathValidator</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Klevu\Logger\Validator\LogDirectoryPathValidator"
+                 type="Klevu\Logger\Validator\LogDirectoryValidator">
+        <arguments>
+            <argument name="validateIsWritable" xsi:type="boolean">false</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Klevu\Logger\Validator\LogArchiveDirectoryValidator"
+                 type="Klevu\Logger\Validator\LogDirectoryValidator">
+        <arguments>
+            <argument name="isArchive" xsi:type="boolean">true</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Klevu\Logger\Validator\LogArchiveDirectoryPathValidator"
+                 type="Klevu\Logger\Validator\LogDirectoryValidator">
+        <arguments>
+            <argument name="validateIsWritable" xsi:type="boolean">false</argument>
+            <argument name="isArchive" xsi:type="boolean">true</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Klevu\Logger\Validator\LogDirectoryPathWriter"
+                 type="Magento\Framework\Filesystem\Directory\Write">
+        <arguments>
+            <argument name="driver" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+            <argument name="path" xsi:type="string">/</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Klevu\Logger\Service\Action\Directory\ArchiveDownloadAction"
+                 type="Klevu\Logger\Service\Action\Directory\ArchiveAction">
+        <arguments>
+            <argument name="archiveDirectoryPathValidator"
+                      xsi:type="object">Klevu\Logger\Validator\LogDirectoryPathValidator</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Klevu\Logger\Service\Action\Directory\DeleteArchiveAction"
+                 type="Klevu\Logger\Service\Action\Directory\DeleteAction">
+        <arguments>
+            <argument name="validator"
+                      xsi:type="object">Klevu\Logger\Validator\LogArchiveDirectoryValidator</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Klevu\Logger\Validator\LogSizeValidator">
+        <arguments>
+            <argument name="logsDirectoryProvider"
+                      xsi:type="object">Klevu\Logger\Service\Provider\StoreLogsDirectoryProvider</argument>
+            <argument name="downloadLimit"
+                      xsi:type="const">Klevu\Logger\Validator\LogSizeValidator::LOG_SIZE_LIMIT</argument>
+        </arguments>
+    </type>
+
+    <type name="Klevu\Logger\Validator\PathValidatorWithTrailingSlash">
+        <arguments>
+            <argument name="fileSystemDriver"
+                      xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+
+    <type name="Klevu\Logger\Validator\LogDirectoryValidator">
+        <arguments>
+            <argument name="pathValidator"
+                      xsi:type="object">Klevu\Logger\Validator\PathValidatorWithTrailingSlash</argument>
+            <argument name="fileSystemWrite"
+                      xsi:type="object">Klevu\Logger\Validator\LogDirectoryPathWriter</argument>
+        </arguments>
+    </type>
+
+    <type name="Klevu\Logger\Service\Provider\LogFileNameProvider">
+        <arguments>
+            <argument name="fileNameValidator"
+                      xsi:type="object">Klevu\Logger\Validator\LogFileNameValidator</argument>
+        </arguments>
+    </type>
+
+    <type name="Klevu\Logger\Service\Provider\StoreLogsDirectoryProvider">
+        <arguments>
+            <argument name="directoryPathProvider"
+                      xsi:type="object">Klevu\Logger\Service\Provider\StoreLogsDirectoryPathProvider</argument>
+            <argument name="directoryValidator"
+                      xsi:type="object">Klevu\Logger\Validator\LogDirectoryPathValidator</argument>
+            <argument name="fileSystemWrite"
+                      xsi:type="object">Klevu\Logger\Service\Provider\StoreLogsDirectoryWriter</argument>
+        </arguments>
+    </type>
+
+    <!-- Service Actions -->
+    <type name="Klevu\Logger\Service\Action\Directory\ArchiveAction">
+        <arguments>
+            <argument name="directoryValidator"
+                      xsi:type="object">Klevu\Logger\Validator\LogDirectoryValidator</argument>
+            <argument name="archiveDirectoryValidator"
+                      xsi:type="object">Klevu\Logger\Validator\LogArchiveDirectoryValidator</argument>
+            <argument name="archiveDirectoryPathValidator"
+                      xsi:type="object">Klevu\Logger\Validator\LogArchiveDirectoryPathValidator</argument>
+            <argument name="archiveCompression" xsi:type="object">Magento\Framework\Archive\Gz</argument>
+            <argument name="tarArchive" xsi:type="object">Magento\Framework\Archive\Tar</argument>
+            <argument name="storeLogsDirectoryProvider"
+                      xsi:type="object">Klevu\Logger\Service\Provider\StoreLogsDirectoryProvider</argument>
+            <argument name="fileSystemDriver"
+                      xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+            <argument name="extension" xsi:type="string">gz</argument>
+            <argument name="fileNamePrefix" xsi:type="string">klevu_log_</argument>
+            <argument name="extensionValidator" xsi:type="object">Klevu\Logger\Validator\LogArchiveExtensionValidator</argument>
+        </arguments>
+    </type>
+
+    <type name="Klevu\Logger\Service\Action\Directory\DownloadAction">
+        <arguments>
+            <argument name="extension" xsi:type="string">zip</argument>
+            <argument name="archiveAction"
+                      xsi:type="object">Klevu\Logger\Service\Action\Directory\ArchiveDownloadAction</argument>
+            <argument name="validator"
+                      xsi:type="object">Klevu\Logger\Validator\LogDirectoryValidator</argument>
+        </arguments>
+    </type>
+
+    <type name="Klevu\Logger\Service\Action\Directory\DeleteAction">
+        <arguments>
+            <argument name="validator"
+                      xsi:type="object">Klevu\Logger\Validator\LogDirectoryValidator</argument>
+            <argument name="fileSystemDriver"
+                      xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+
+    <type name="Klevu\Logger\Service\DownloadLogs">
+        <arguments>
+            <argument name="logsDirectoryProvider"
+                      xsi:type="object">Klevu\Logger\Service\Provider\StoreLogsDirectoryProvider</argument>
+            <argument name="logsDirectoryPathProvider"
+                      xsi:type="object">Klevu\Logger\Service\Provider\StoreLogsDirectoryPathProvider</argument>
+            <argument name="logSizeValidator"
+                      xsi:type="object">Klevu\Logger\Validator\LogSizeValidator</argument>
+        </arguments>
+    </type>
+
+    <type name="Klevu\Logger\Service\ArchiveLogs">
+        <arguments>
+            <argument name="logsDirectoryProvider"
+                      xsi:type="object">Klevu\Logger\Service\Provider\StoreLogsDirectoryProvider</argument>
+            <argument name="logsDirectoryPathProvider"
+                      xsi:type="object">Klevu\Logger\Service\Provider\StoreLogsDirectoryPathProvider</argument>
+            <argument name="logsArchiveDirectoryPathProvider"
+                      xsi:type="object">Klevu\Logger\Service\Provider\StoreLogsArchiveDirectoryPathProvider</argument>
+            <argument name="archiveValidator"
+                      xsi:type="object">Klevu\Logger\Validator\LogDirectoryValidator</argument>
+        </arguments>
+    </type>
+
+    <type name="Klevu\Logger\Service\ClearLogs">
+        <arguments>
+            <argument name="directoryPathProvider"
+                      xsi:type="object">Klevu\Logger\Service\Provider\StoreLogsArchiveDirectoryPathProvider</argument>
+            <argument name="deleteAction"
+                      xsi:type="object">Klevu\Logger\Service\Action\Directory\DeleteArchiveAction</argument>
+        </arguments>
+    </type>
+
+    <type name="Klevu\Logger\ViewModel\Config\Button\LogArchive">
+        <arguments>
+            <argument name="storeLogsDirectoryProvider"
+                      xsi:type="object">Klevu\Logger\Service\Provider\StoreLogsDirectoryProvider</argument>
+            <argument name="urlBuilder"
+                      xsi:type="object">Magento\Framework\Url</argument>
+        </arguments>
+    </type>
+
+    <type name="Klevu\Logger\ViewModel\Config\Button\LogClear">
+        <arguments>
+            <argument name="storeLogsDirectoryProvider"
+                      xsi:type="object">Klevu\Logger\Service\Provider\StoreLogsArchiveDirectoryProvider</argument>
+            <argument name="urlBuilder"
+                      xsi:type="object">Magento\Framework\Url</argument>
+        </arguments>
+    </type>
+
+    <type name="Klevu\Logger\ViewModel\Config\Button\LogDownload">
+        <arguments>
+            <argument name="storeLogsDirectoryProvider"
+                      xsi:type="object">Klevu\Logger\Service\Provider\StoreLogsDirectoryProvider</argument>
+        </arguments>
+    </type>
+
+    <type name="Klevu\Logger\Handler\LogIfConfigured">
+        <arguments>
+            <argument name="filesystem"
+                      xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+
+    <type name="Klevu\Logger\Service\FileNameSanitizerService">
+        <arguments>
+            <argument name="fileNameValidator"
+                      xsi:type="object">Klevu\Logger\Validator\LogFileNameValidator</argument>
+        </arguments>
+    </type>
+</config>

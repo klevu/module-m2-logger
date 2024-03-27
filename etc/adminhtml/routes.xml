@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<!-- Copyright © Klevu Oy. All rights reserved. See LICENSE.txt for license details. -->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
+    <router id="admin">
+        <route id="klevu_logger" frontName="klevu_logger">
+            <module name="Klevu_Logger"/>
+        </route>
+    </router>
+</config>

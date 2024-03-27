@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+
+<!-- Copyright © Klevu Oy. All rights reserved. See LICENSE.txt for license details. -->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
+    <group id="logger" translate="label" sortOrder="1000" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Logging</label>
+        <field id="klevu_logger_download"
+               translate="label comment"
+               type="button"
+               sortOrder="910"
+               showInDefault="0"
+               showInWebsite="0"
+               showInStore="1">
+            <label>Download Logs</label>
+            <frontend_model>Klevu\Logger\Block\Adminhtml\Config\Developer\LogDownload</frontend_model>
+            <comment>
+                <![CDATA[Download all log files for current store from '<code>var/log/klevu/STORE_CODE</code>'.]]>
+            </comment>
+        </field>
+
+        <field id="klevu_logger_archive"
+               translate="label comment"
+               type="button"
+               sortOrder="920"
+               showInDefault="0"
+               showInWebsite="0"
+               showInStore="1">
+            <label>Archive Logs</label>
+            <frontend_model>Klevu\Logger\Block\Adminhtml\Config\Developer\LogArchive</frontend_model>
+            <comment>
+                <![CDATA[Archive all logs for the current store from '<code>var/log/klevu/STORE_CODE</code>'.<br>
+                Logs will be compressed and placed in '<code>var/log/klevu/.archive/STORE_CODE</code>'.]]>
+            </comment>
+        </field>
+
+        <field id="klevu_logger_clear"
+               translate="label comment"
+               type="button"
+               sortOrder="930"
+               showInDefault="0"
+               showInWebsite="0"
+               showInStore="1">
+            <label>Clear Archived Logs</label>
+            <frontend_model>Klevu\Logger\Block\Adminhtml\Config\Developer\LogClear</frontend_model>
+            <comment>
+                <![CDATA[All archived logs for the current store will be removed from
+                '<code>var/log/klevu/.archive/STORE_CODE</code>'.]]>
+            </comment>
+        </field>
+    </group>
+</config>
