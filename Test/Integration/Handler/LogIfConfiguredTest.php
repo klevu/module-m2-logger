@@ -373,6 +373,37 @@ class LogIfConfiguredTest extends TestCase
     }
 
     /**
+     * @magentoAppArea crontab
+     */
+    public function testWrite_MaxNormalizeDepthSettingIsUsed(): void
+    {
+        $this->deleteAllLogs();
+        $record = $this->getRecord(
+            message: ['level1' => ['level2' => ['level 3' => ['level 4' => 'Level 4 message']]]],
+        );
+        $this->createStore();
+        $store = $this->storeFixturesPool->get('test_store');
+        $this->createStoreLogsDirectory(null, $store->getCode());
+        $directory = $this->getStoreLogsDirectoryPath(null, $store->getCode());
+        $fileName = $directory . DIRECTORY_SEPARATOR . 'klevu-' . $store->getCode() . '-some_log_name.log';
+
+        $this->storeScopeProvider->setCurrentStoreByCode($store->getCode());
+
+        $logIfConfigured = $this->instantiateHandlerLogIfConfigured([
+            'maxNormalizeDepth' => 3,
+        ]);
+        $logIfConfigured->write($record);
+        $fileIo = $this->objectManager->get(File::class);
+        $this->assertTrue($fileIo->fileExists($fileName));
+        $fileContents = $fileIo->read($fileName);
+
+        $this->assertStringContainsString(
+            'klevu.WARNING: {"level1":{"level2":{"level 3":"Over 3 levels deep, aborting normalization"}}}',
+            $fileContents,
+        );
+    }
+
+    /**
      * @param mixed[]|null $params
      *
      * @return LogIfConfigured
@@ -399,7 +430,7 @@ class LogIfConfiguredTest extends TestCase
 
     /**
      * @param int $level
-     * @param string $message
+     * @param mixed $message
      * @param mixed[] $context
      *
      * @return mixed[]
@@ -408,7 +439,7 @@ class LogIfConfiguredTest extends TestCase
      */
     private function getRecord(
         int $level = Logger::WARNING,
-        string $message = 'randomTestMessage',
+        mixed $message = 'randomTestMessage',
         array $context = [],
     ): array {
         return [

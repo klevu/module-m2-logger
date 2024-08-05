@@ -70,7 +70,7 @@ class LogDirectoryPathValidatorTest extends TestCase
     private function instantiateLogDirectoryPathValidator(?array $params = []): LogDirectoryValidator
     {
         return $this->objectManager->create(
-            DirectoryPathValidatorVirtualType::class, // virtualType
+            DirectoryPathValidatorVirtualType::class, // @phpstan-ignore-line virtualType
             $params,
         );
     }

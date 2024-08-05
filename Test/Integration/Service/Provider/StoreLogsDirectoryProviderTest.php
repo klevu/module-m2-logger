@@ -247,7 +247,7 @@ class StoreLogsDirectoryProviderTest extends TestCase
     private function instantiateStoreLogsArchiveDirectoryProvider(?array $params = []): StoreLogsDirectoryProvider
     {
         return $this->objectManager->create(
-            ArchiveDirectoryProviderVirtualType::class, // virtualType
+            ArchiveDirectoryProviderVirtualType::class, // @phpstan-ignore-line virtualType
             $params,
         );
     }
@@ -273,7 +273,7 @@ class StoreLogsDirectoryProviderTest extends TestCase
     private function instantiateStoreLogsArchivePathProvider(?array $params = []): StoreLogsDirectoryPathProvider
     {
         return $this->objectManager->create(
-            ArchiveDirectoryPathProviderVirtualType::class, // virtualType
+            ArchiveDirectoryPathProviderVirtualType::class, // @phpstan-ignore-line virtualType
             $params,
         );
     }
