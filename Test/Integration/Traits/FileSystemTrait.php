@@ -69,14 +69,18 @@ trait FileSystemTrait
     }
 
     /**
+     * @param bool $includeSystem
+     *
      * @return void
      * @throws FileSystemException
      */
-    private function deleteAllLogs(): void
+    private function deleteAllLogs(bool $includeSystem = false): void
     {
         $directoryList = $this->objectManager->get(DirectoryList::class);
         $directoryPath = $directoryList->getPath(DirectoryList::LOG);
-        $directoryPath .= DIRECTORY_SEPARATOR . 'klevu';
+        if (!$includeSystem) {
+            $directoryPath .= DIRECTORY_SEPARATOR . 'klevu';
+        }
 
         $systemFileDriver = $this->objectManager->create(File::class);
         if ($systemFileDriver->isExists($directoryPath)) {

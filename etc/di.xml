@@ -48,9 +48,9 @@
                  type="Magento\Framework\Logger\Monolog">
         <arguments>
             <argument name="handlers" xsi:type="array">
-                <item name="report" xsi:type="object">\Klevu\Logger\Handler\LogDisabled</item>
-                <item name="system" xsi:type="object">Klevu\Logger\Handler\LogDisabled</item>
-                <item name="debug" xsi:type="object">Klevu\Logger\Handler\LogDisabled</item>
+                <item name="report" xsi:type="object">Monolog\Handler\NoopHandler</item>
+                <item name="system" xsi:type="object">Monolog\Handler\NoopHandler</item>
+                <item name="debug" xsi:type="object">Monolog\Handler\NoopHandler</item>
             </argument>
             <argument name="processors" xsi:type="array">
                 <item name="psr_log_message_processor"

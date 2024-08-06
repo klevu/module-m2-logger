@@ -19,6 +19,8 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
 // phpcs:ignore SlevomatCodingStandard.Namespaces.UseOnlyWhitelistedNamespaces.NonFullyQualified
+use Monolog\Formatter\NormalizerFormatter;
+// phpcs:ignore SlevomatCodingStandard.Namespaces.UseOnlyWhitelistedNamespaces.NonFullyQualified
 use Monolog\Logger;
 
 /**
@@ -26,6 +28,8 @@ use Monolog\Logger;
  */
 class LogIfConfigured extends BaseHandler
 {
+    public const MAX_NORMALIZE_DEPTH = 10;
+
     /**
      * @var IsLoggingEnabledServiceInterface
      */
@@ -61,6 +65,7 @@ class LogIfConfigured extends BaseHandler
      * @param StoreManagerInterface $storeManager
      * @param string|null $filePath
      * @param string|null $fileName
+     * @param int $maxNormalizeDepth
      */
     public function __construct(
         IsLoggingEnabledServiceInterface $loggingEnabledService,
@@ -72,6 +77,7 @@ class LogIfConfigured extends BaseHandler
         StoreManagerInterface $storeManager,
         ?string $filePath = null,
         ?string $fileName = null,
+        int $maxNormalizeDepth = self::MAX_NORMALIZE_DEPTH,
     ) {
         parent::__construct($filesystem, $filePath, $fileName);
 
@@ -81,6 +87,7 @@ class LogIfConfigured extends BaseHandler
         $this->logFileNameProvider = $logFileNameProvider;
         $this->fileNameSanitizer = $fileNameSanitizerService;
         $this->storeManager = $storeManager;
+        $this->setMaxFormatterDepth(maxNormalizeDepth: $maxNormalizeDepth);
     }
 
     /**
@@ -173,5 +180,20 @@ class LogIfConfigured extends BaseHandler
         $this->fileName = null;
         $this->url = null;
         $this->close();
+    }
+
+    /**
+     * @param int $maxNormalizeDepth
+     *
+     * @return void
+     */
+    private function setMaxFormatterDepth(int $maxNormalizeDepth): void
+    {
+        $formatter = $this->getFormatter();
+        if (method_exists($formatter, 'setMaxNormalizeDepth')) {
+            /** @var NormalizerFormatter $formatter */
+            $formatter->setMaxNormalizeDepth(maxNormalizeDepth: $maxNormalizeDepth);
+        }
+        $this->setFormatter($formatter);
     }
 }

@@ -119,7 +119,7 @@ class LogArchiveDirectoryValidatorTest extends TestCase
     private function instantiateLogArchiveDirectoryValidator(?array $params = []): LogDirectoryValidator
     {
         return $this->objectManager->create(
-            ArchiveDirectoryValidatorVirtualType::class, // virtualType
+            ArchiveDirectoryValidatorVirtualType::class, // @phpstan-ignore-line virtualType
             $params,
         );
     }

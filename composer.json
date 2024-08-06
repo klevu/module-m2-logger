@@ -2,8 +2,8 @@
     "name": "klevu/module-m2-logger",
     "description": "Provides logger functionality to modules within Klevu Magento 2 suite",
     "require": {
-        "klevu/module-m2-configuration": "0.3.0",
-        "klevu/module-m2-logger-api": "0.3.0",
+        "klevu/module-m2-configuration": "0.4.0",
+        "klevu/module-m2-logger-api": "0.4.0",
         "psr/log": "*",
         "monolog/monolog": "~2.00",
         "magento/framework": "@stable",
@@ -11,10 +11,10 @@
         "magento/module-store": "@stable"
     },
     "require-dev": {
-        "klevu/module-m2-test-fixtures": "0.3.0"
+        "klevu/module-m2-test-fixtures": "0.4.0"
     },
     "type": "magento2-module",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "license": [
         "MIT"
     ],
