@@ -25,4 +25,19 @@
             <argument name="viewModel" xsi:type="object">Klevu\Logger\ViewModel\Config\Button\LogClear</argument>
         </arguments>
     </virtualType>
+
+    <virtualType name="Klevu\Configuration\ViewModel\Config\Information\KnowledgeBase"
+                 type="Klevu\Configuration\ViewModel\Config\Information\ArticleList">
+        <arguments>
+            <argument name="articles" xsi:type="array">
+                <item name="documentation" xsi:type="array">
+                    <item name="logging" xsi:type="array">
+                        <item name="link" xsi:type="string"><![CDATA[https://docs.klevu.com/klevu-magento-v4/logging]]></item>
+                        <item name="order" xsi:type="number">400</item>
+                        <item name="title" xsi:type="string">Logging</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
 </config>
