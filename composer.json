@@ -5,7 +5,7 @@
         "klevu/module-m2-configuration": "^1.0.0",
         "klevu/module-m2-logger-api": "^1.0.0",
         "psr/log": "*",
-        "monolog/monolog": "~2.00",
+        "monolog/monolog": "~2.0|~3.0",
         "magento/framework": "@stable",
         "magento/module-backend": "@stable",
         "magento/module-store": "@stable",
@@ -15,7 +15,7 @@
         "klevu/module-m2-test-fixtures": "0.4.0"
     },
     "type": "magento2-module",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "license": [
         "MIT"
     ],
