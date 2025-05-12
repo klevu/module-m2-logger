@@ -18,10 +18,11 @@ use Magento\Framework\Logger\Handler\Base as BaseHandler;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
-// phpcs:ignore SlevomatCodingStandard.Namespaces.UseOnlyWhitelistedNamespaces.NonFullyQualified
+// phpcs:disable SlevomatCodingStandard.Namespaces.UseOnlyWhitelistedNamespaces.NonFullyQualified
 use Monolog\Formatter\NormalizerFormatter;
-// phpcs:ignore SlevomatCodingStandard.Namespaces.UseOnlyWhitelistedNamespaces.NonFullyQualified
 use Monolog\Logger;
+use Monolog\LogRecord;
+// phpcs:enable SlevomatCodingStandard.Namespaces.UseOnlyWhitelistedNamespaces.NonFullyQualified
 
 /**
  * @property string|null $fileName
@@ -91,11 +92,11 @@ class LogIfConfigured extends BaseHandler
     }
 
     /**
-     * @param mixed[] $record
+     * @param LogRecord|mixed[] $record
      *
      * @return void
      */
-    public function write(array $record): void
+    public function write(LogRecord|array $record): void
     {
         $stores = $this->getStores($record);
         foreach ($stores as $store) {
@@ -126,21 +127,21 @@ class LogIfConfigured extends BaseHandler
     }
 
     /**
-     * @param mixed[] $record
+     * @param LogRecord|mixed[] $record
      *
      * @return bool
      */
-    public function isHandling(array $record): bool
+    public function isHandling(LogRecord|array $record): bool
     {
         return (bool)count($this->getStores($record));
     }
 
     /**
-     * @param mixed[] $record
+     * @param LogRecord|mixed[] $record
      *
      * @return StoreInterface[]
      */
-    private function getStores(array $record): array
+    private function getStores(LogRecord|array $record): array
     {
         $currentScope = $this->scopeProvider->getCurrentScope();
 
