@@ -18,11 +18,9 @@ use Magento\Framework\Logger\Handler\Base as BaseHandler;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
-// phpcs:disable SlevomatCodingStandard.Namespaces.UseOnlyWhitelistedNamespaces.NonFullyQualified
 use Monolog\Formatter\NormalizerFormatter;
 use Monolog\Logger;
 use Monolog\LogRecord;
-// phpcs:enable SlevomatCodingStandard.Namespaces.UseOnlyWhitelistedNamespaces.NonFullyQualified
 
 /**
  * @property string|null $fileName
