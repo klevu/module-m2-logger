@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace Klevu\Logger\Source\LogLevel;
 
 use Magento\Framework\Data\OptionSourceInterface;
-// phpcs:ignore SlevomatCodingStandard.Namespaces.UseOnlyWhitelistedNamespaces.NonFullyQualified
 use Monolog\Logger;
 
 class Monolog implements OptionSourceInterface
