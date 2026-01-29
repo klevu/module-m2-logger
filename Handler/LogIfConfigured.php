@@ -53,6 +53,10 @@ class LogIfConfigured extends BaseHandler
      * @var StoreManagerInterface
      */
     private readonly StoreManagerInterface $storeManager;
+    /**
+     * @var bool
+     */
+    private bool $isWriting = false;
 
     /**
      * @param IsLoggingEnabledServiceInterface $loggingEnabledService
@@ -96,6 +100,10 @@ class LogIfConfigured extends BaseHandler
      */
     public function write(LogRecord|array $record): void
     {
+        if ($this->isWriting) {
+            return;
+        }
+
         $stores = $this->getStores($record);
         foreach ($stores as $store) {
             $fileName = $this->logFileNameProvider->get(storeId: (int)$store->getId());
@@ -120,7 +128,9 @@ class LogIfConfigured extends BaseHandler
                 return;
             }
 
+            $this->isWriting = true;
             parent::write(record: $record);
+            $this->isWriting = false;
         }
     }
 
