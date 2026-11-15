@@ -108,17 +108,16 @@ class LogIfConfigured extends BaseHandler
         foreach ($stores as $store) {
             $fileName = $this->logFileNameProvider->get(storeId: (int)$store->getId());
             if (!$fileName) {
-                return;
-            }
-            if ($fileName !== $this->fileName) {
-                $this->resetFileProperties();
+                continue;
             }
             try {
-                if (null === $this->fileName) {
-                    $this->fileName = $this->logDirectoryProvider->get(storeId: (int)$store->getId())
-                        . DIRECTORY_SEPARATOR
-                        . $this->fileNameSanitizer->execute(fileName: $fileName);
-                    $this->url = $this->fileName;
+                $filePath = $this->logDirectoryProvider->get(storeId: (int)$store->getId())
+                    . DIRECTORY_SEPARATOR
+                    . $this->fileNameSanitizer->execute(fileName: $fileName);
+                if ($filePath !== $this->fileName) {
+                    $this->resetFileProperties();
+                    $this->fileName = $filePath;
+                    $this->url = $filePath;
                 }
 
                 $formatter = $this->getFormatter();
